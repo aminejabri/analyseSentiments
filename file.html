@@ -1,0 +1,136 @@
+<html>
+<head>
+    <title>Table Data Addition</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.js"></script>
+</head>
+<body>
+
+    <div class="container" >
+        <div class="text-center">
+            <h1> <img src="main.png" style="margin-top: 50px;"width="40%" class="img-fluid"></h1>
+        </div>
+
+		<h3>Quelques statistiques </h3>
+        <table data-height="460" class="table">
+        <tbody>
+            <tr>
+              <td>Nombre des tweets analysés</td>
+              <td id="nombre-de-tweets">Otto</td>
+            </tr>
+            <tr>
+              <td> Nombres des hits dans la base</td>
+              <td id="nbr-hits">Otto</td>
+            </tr>
+            <tr>
+              <td>Nombre moyen des réponses / Status</td>
+              <td id="avg-rep">Otto</td>
+            </tr>
+
+            <tr>
+              <td>Nombre moyen des quoted tweets / Status</td>
+              <td id="avg-qtweet">Otto</td>
+            </tr>
+            <tr>
+              <td>Date et heure de la derniere analyese </td>
+              <td id="last-trmt">Otto</td>
+            </tr>
+            <tr>
+              <td>Temps de l'analyse en seconds  </td>
+              <td id="duree-trmt">Otto</td>
+            </tr>
+        </tbody>
+        <div class="modal-body row">
+            <div class="col-md-offset-3 col-md-6">
+                <img src="moyenne.png" width="100%" class="img-fluid">
+            </div>
+        </div>
+        <div class="modal-body row">
+          <div class="col-md-4">
+              <img src="max.png" width="100%" class="img-fluid">
+          </div>
+          <div class="col-md-8">
+              <br/>
+              <br/>
+              <h3>tweet le plus négatif :</h3><a id="max-neg">azefhalzjhefkljazheflzkjf azhe flkazhfe khaz efkljzah efkjlzah ekjha zekjlehafzkj</a>
+              <br/>
+              <br/>
+              <h3>tweet le plus positif :</h3><a id="max-pos">azefhalzjhefkljazheflzkjf azhe flkazhfe khaz efkljzah efkjlzah ekjha zekjlehafzkj</a>
+          </div>
+        </div>
+            <br/>
+        <div class="modal-body row">
+          <div class="col-md-4">
+              <img src="min.png" width="100%" class="img-fluid">
+          </div>
+          <div class="col-md-8">
+              <br/>
+              <br/>
+              <h3>tweet le moins négatif :</h3><a id="min-neg">azefhalzjhefkljazheflzkjf azhe flkazhfe khaz efkljzah efkjlzah ekjha zekjlehafzkj</a>
+              <br/>
+              <br/>
+              <h3>tweet moins positif :</h3><a id="min-pos">azefhalzjhefkljazheflzkjf azhe flkazhfe khaz efkljzah efkjlzah ekjha zekjlehafzkj</a>
+          </div>
+        </div>
+
+        </table>
+		<h3>La tables des sentiments en fonction des tweets</h3>
+        <table id="table" data-height="460">
+        <thead>
+            <tr>
+                <th data-field="text">Tweets</th>
+                <th data-field="neg">Positive</th>
+                <th data-field="pos">Négative</th>
+                <th data-field="neu">Neutre</th>
+            </tr>
+        </thead>
+    </table>
+    </div>
+	<script>
+
+	var $table = $('#table');
+    var mydata
+
+    $.getJSON("resultats_analyse.json", function(json) {
+        mydata = json;
+        $('#table').bootstrapTable({
+            data: json
+        });
+    })  .done(function() {
+        console.log( "second success" );
+          })
+          .fail(function() {
+            console.log( "error" );
+          })
+          .always(function() {
+            console.log( "complete" );
+
+          });
+
+    $.getJSON("statistiques.json", function(json) {
+        $('#nombre-de-tweets').html(json["nbr_tweet"])
+        $('#nbr-hits').html(json["nbr_hits"])
+        $('#avg-rep').html(json["avg_rep"])
+        $('#avg-qtweet').html(json["avg_qtweet"])
+        $('#duree-trmt').html(json["duree_trmt"])
+        $('#last-trmt').html(json["last_trmt"])
+        $('#min-neg').html(json["min_neg"])
+        $('#min-pos').html(json["min_pos"])
+        $('#max-neg').html(json["max_neg"])
+        $('#max-pos').html(json["max_pos"])
+
+        $('#min-neg').attr("href", "https://twitter.com/franceinfo/status/" + json["id_min_neg"])
+        $('#min-pos').attr("href", "https://twitter.com/franceinfo/status/" + json["id_min_pos"])
+        $('#max-neg').attr("href", "https://twitter.com/franceinfo/status/" + json["id_max_neg"])
+        $('#max-pos').attr("href", "https://twitter.com/franceinfo/status/" + json["id_max_pos"])
+    })
+
+
+
+	</script>
+</body>
+</html>
